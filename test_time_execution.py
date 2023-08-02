@@ -2,23 +2,11 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
+from selenium.webdriver.edge.options import Options as EdgeOptions
 import time
 
-def scrape_table_data(browser):
+def scrape_table_data():
     start = time.time()
-    if browser == "phantomjs":
-        driver = webdriver.PhantomJS()
-    elif browser == "chrome":
-        options = ChromeOptions()
-        options.add_argument('--headless')
-        driver = webdriver.Chrome(options=options)
-    elif browser == "firefox":
-        options = FirefoxOptions()
-        options.set_headless()
-        driver = webdriver.Firefox(options=options)
-    else:
-        raise ValueError("Invalid browser specified.")
-
     driver.get('https://www.lambdatest.com/selenium-playground/table-sort-search-demo')
 
     search_bar = driver.find_element(By.XPATH, '//*[@id="example_filter"]/label/input')
@@ -36,17 +24,32 @@ def scrape_table_data(browser):
     execution_time = (end - start) * 10 ** 3
     return execution_time
 
-phantomjs_execution_time = scrape_table_data("phantomjs")
-chrome_execution_time = scrape_table_data("chrome")
-firefox_execution_time = scrape_table_data("firefox")
+# PhantomJS execution
+# Required selenium==3.8.0
+# driver = webdriver.PhantomJS()
+# execution_time = scrape_table_data()
+# print(f"Time taken PhantomJS Browser: {execution_time:.03f}ms")
 
-print(f"Time taken PhantomJS Browser: {phantomjs_execution_time:.03f}ms")
-print(f"Time taken Chrome Browser: {chrome_execution_time:.03f}ms")
-print(f"Time taken Firefox Browser: {firefox_execution_time:.03f}ms")
+# Chrome execution
+# Latest version of Selenium is recommended
+options = ChromeOptions()
+options.add_argument('--headless=new')
+driver = webdriver.Chrome(options=options)
+execution_time = scrape_table_data()
+print(f"Time taken Chrome Browser: {execution_time:.03f}ms")
 
-if (phantomjs_execution_time < chrome_execution_time) and (phantomjs_execution_time < firefox_execution_time):
-    print("PhantomJS has better time execution")
-elif (firefox_execution_time < chrome_execution_time) and (firefox_execution_time < phantomjs_execution_time):
-    print("Firefox has better time execution")
-else:
-    print("Chrome has better time execution")
+# Firefox execution
+# Latest version of Selenium is recommended
+# options = FirefoxOptions()
+# options.add_argument('--headless')
+# driver = webdriver.Firefox(options=options)
+# execution_time = scrape_table_data()
+# print(f"Time taken Firefox Browser: {execution_time:.03f}ms")
+
+# Edge execution
+# Latest version of Selenium is recommended
+# options = EdgeOptions()
+# options.add_argument('--headless')
+# driver = webdriver.Edge(options=options)
+# execution_time = scrape_table_data()
+# print(f"Time taken Edge Browser: {execution_time:.03f}ms")
